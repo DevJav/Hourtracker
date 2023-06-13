@@ -90,9 +90,9 @@ class TaskTracker:
             self.delete_buttons[task_name] = delete_button
 
             if self.active_tasks[task_name]:
-                task_button.config(relief=tk.SUNKEN)
+                task_button.config(relief=tk.SUNKEN, text="Stop", bg='salmon')
             else:
-                task_button.config(relief=tk.RAISED)
+                task_button.config(relief=tk.RAISED, text="Start", bg='pale green')
 
         self.update_counters()
 
