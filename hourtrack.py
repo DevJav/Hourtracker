@@ -13,17 +13,20 @@ class TaskTracker:
         self.root.title("Task Tracker")
         self.root.geometry("400x300")  # Set the window size (width x height)
 
-        self.task_entry = tk.Entry(self.root)
+        self.buttons_frame = tk.Frame(self.root) 
+        self.buttons_frame.pack()
+
+        self.task_entry = tk.Entry(self.buttons_frame)
         self.task_entry.pack()
 
-        self.add_button = tk.Button(self.root, text="Add Task", command=self.add_task)
-        self.add_button.pack()
+        self.add_button = tk.Button(self.buttons_frame, text="Add Task", command=self.add_task)
+        self.add_button.pack(side=tk.LEFT)
 
-        self.save_button = tk.Button(self.root, text="Save Data", command=self.save_data)
-        self.save_button.pack()
+        self.save_button = tk.Button(self.buttons_frame, text="Save Data", command=self.save_data)
+        self.save_button.pack(side=tk.LEFT)
 
-        self.load_button = tk.Button(self.root, text="Load Data", command=self.load_data)
-        self.load_button.pack()
+        self.load_button = tk.Button(self.buttons_frame, text="Load Data", command=self.load_data)
+        self.load_button.pack(side=tk.LEFT)
 
         self.task_labels = {}
         self.delete_buttons = {}
@@ -71,7 +74,7 @@ class TaskTracker:
 
     def update_gui(self):
         for widget in self.root.winfo_children():
-            if widget not in [self.task_entry, self.add_button, self.save_button, self.load_button]:
+            if widget not in [self.buttons_frame, self.task_entry, self.add_button, self.save_button, self.load_button]:
                 widget.pack_forget()
 
         for task_name in self.tasks:
@@ -98,18 +101,19 @@ class TaskTracker:
 
     def update_counters(self):
         for task_name, task_label in self.task_labels.items():
-            if self.active_tasks[task_name]:
-                elapsed_time = time.time() - self.start_times[task_name] + self.tasks[task_name]
-                hours = int(elapsed_time // 3600)
-                minutes = int((elapsed_time % 3600) // 60)
-                seconds = int(elapsed_time % 60)
-                counter_text = f"{task_name} {hours:02d}:{minutes:02d}:{seconds:02d}"
-            else:
-                elapsed_time = self.tasks[task_name]
-                hours = int(elapsed_time // 3600)
-                minutes = int((elapsed_time % 3600) // 60)
-                seconds = int(elapsed_time % 60)
-                counter_text = f"{task_name} Total: {hours:02d}:{minutes:02d}:{seconds:02d}"
+            if task_name in self.active_tasks:
+                if self.active_tasks[task_name]:
+                    elapsed_time = time.time() - self.start_times[task_name] + self.tasks[task_name]
+                    hours = int(elapsed_time // 3600)
+                    minutes = int((elapsed_time % 3600) // 60)
+                    seconds = int(elapsed_time % 60)
+                    counter_text = f"{task_name} {hours:02d}:{minutes:02d}:{seconds:02d}"
+                else:
+                    elapsed_time = self.tasks[task_name]
+                    hours = int(elapsed_time // 3600)
+                    minutes = int((elapsed_time % 3600) // 60)
+                    seconds = int(elapsed_time % 60)
+                    counter_text = f"{task_name} Total: {hours:02d}:{minutes:02d}:{seconds:02d}"
 
             task_label.config(text=counter_text)
 
